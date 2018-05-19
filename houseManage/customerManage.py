@@ -66,13 +66,6 @@ class CustomerManage():
         print r.status_code
 
     @staticmethod
-    def deleteHomeProvider():
-        homeProvideID=hmpv.deleteHouseProvider()
-        reqUrl=pu.HouseManageUrls()["deleteHomeSourceProvider"]+str(homeProvideID)+"/deleteRecordById"
-        r=requests.get(reqUrl)
-        print r.status_code
-
-    @staticmethod
     def batchDeleteHomeProvider():
         pass
 
@@ -98,7 +91,6 @@ class CustomerManage():
         payload["providerId"] = CustomerManage.providerId
         reqUrl = pu.HouseManageUrls()["updateHomeSourceUrl"]
         r = requests.post(reqUrl, json=payload)
-
         print r.status_code
 
     # 添加空间
@@ -129,11 +121,19 @@ class CustomerManage():
         r = requests.get(reqUrl)
         print r.status_code
 
-    # @staticmethod
-    # def editSpace():
+    @staticmethod
+    def deleteHouseSource():
+        houseSourceID = hmpv.deleteHouseSource()
+        reqUrl = pu.HouseManageUrls()["deleteHomeSourceUrl"] + str(houseSourceID) + "/deleteRecordById"
+        r = requests.get(reqUrl)
+        print r.status_code
 
-
-
+    @staticmethod
+    def deleteHomeProvider():
+        homeProvideID=hmpv.deleteHouseProvider()
+        reqUrl=pu.HouseManageUrls()["deleteHomeSourceProvider"]+str(homeProvideID)+"/deleteRecordById"
+        r=requests.get(reqUrl)
+        print r.status_code
 
 
 
@@ -142,16 +142,17 @@ class CustomerManage():
 a=CustomerManage()
 
 a.addHomeProvider() #添加客户
-
 a.addHouseSource()#添加房源信息
-
-# a.updateHouseSource()#添加房源信息
 a.addSpace() #添加空间信息
 # time.sleep(19)
 a.updateSpace()
-time.sleep(10)
+# time.sleep(10)
 a.deleteSpace()
-# a.deleteHomeProvider()
+# time.sleep(10)
+a.updateHouseSource()
+a.deleteHouseSource()
+time.sleep(10)
+a.deleteHomeProvider()
 
 
 #批量添加房源信息
