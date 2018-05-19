@@ -55,9 +55,10 @@ class projectUrls():
         addhomeSourceProviderUrl=homeSourceProvider+"insertRecord"
 
 
-        # 添加房源
+        # 房源相关
         addHomeSourceUrl="/project-service/homeSource/insertRecord"
         updateHomeSourceUrl="/project-service/homeSource/updateRecord"
+        deleteHomeSourceUrl="/project-service/homeSource/"
 
         # 添加空间类型
         spaceManage = "/project-service/homeList/"
@@ -71,6 +72,7 @@ class projectUrls():
         #添加房源
         house_manage_urls["addHomeSourceUrl"] = projectUrls.projectUrlprefix + addHomeSourceUrl
         house_manage_urls["updateHomeSourceUrl"] = projectUrls.projectUrlprefix + updateHomeSourceUrl
+        house_manage_urls["deleteHomeSourceUrl"] = projectUrls.projectUrlprefix + deleteHomeSourceUrl
 
         # 添加空间类型
         house_manage_urls["addSpaceUrl"] = projectUrls.projectUrlprefix + addSpaceUrl
@@ -80,7 +82,17 @@ class projectUrls():
 
         return house_manage_urls
 
-
     @staticmethod
-    def HouseManageUrls_homeSourceProvider():
-        pass
+    def SystemManageUrls():
+        system_manage_urls={}
+        userBaseUrls="/project-service/user/"
+
+        addUserInfoUrl=userBaseUrls+"info/addUserInfo"
+        updateUserInfoUrl=userBaseUrls+"info/updateUserInfo"
+
+
+
+        system_manage_urls["addUserInfoUrl"]=projectUrls.projectUrlprefix+addUserInfoUrl
+        system_manage_urls["updateUserInfoUrl"]=projectUrls.projectUrlprefix+updateUserInfoUrl
+
+        return system_manage_urls
