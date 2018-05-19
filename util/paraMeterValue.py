@@ -42,6 +42,9 @@ class DeviceManageParamsValue():
     globalZhongJiName = "auto中继" + time.strftime('%m%d%H%M', time.localtime(time.time()))
     globalZhongJiId = ""
 
+
+
+
     @staticmethod
     def getDeviceType(typeID, type=0):
         if typeID == 0:
@@ -330,20 +333,19 @@ class DeviceManageParamsValue():
     def zhongji_deleteInstance():
         return DeviceManageParamsValue.deleteInstance(DeviceManageParamsValue.globalZhongJiId)
 
-
 class HouseManageParamsValue():
     # 对应设备管理系统中的企业昵称
     customerName = "自动化测试"
 
     # 工程管理系统中房源提供商名字
-    houseProviderName = "auto房源提供商" + time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time()))
+    houseProviderName = "auto房源提供商" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
     houseProviderId = ""
     deleteHomeProviderName = "特实打实的"
 
     # 添加房源
-    homeSourceName = "auto_自动化_回民街_" + time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())) + "_" + str(
+    homeSourceName = "auto_自动化_回民街_" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time())) + "_" + str(
         random.randint(0, 10000))
-    updateHomeSourceName="auto_自动化_更新的回民街_" + time.strftime('%Y%m%d_%H%M%S', time.localtime(time.time())) + "_" + str(
+    updateHomeSourceName="auto_自动化_更新的回民街_" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time())) + "_" + str(
         random.randint(0, 10000))
     deleteHouseSouceName = ""
     addrcode=gc.getHouseAddr()["addrcode"]
@@ -415,7 +417,7 @@ class HouseManageParamsValue():
         return updateHouseSourcePayload
     @staticmethod
     def deleteHouseSource():
-        houseSourceID = db.houseSourceSql("getHouseSourceID", HouseManageParamsValue.deleteHouseSouceName)
+        houseSourceID = db.houseSourceSql("getHomeSourceId", HouseManageParamsValue.updateHomeSourceName)
         return houseSourceID
 
     @staticmethod
@@ -455,3 +457,71 @@ class HouseManageParamsValue():
     def deleteSpace():
         spaceID = db.houseSourceSql("getSpaceId", HouseManageParamsValue.updatHomeNo)
         return spaceID
+
+class SystemManageParamsValue():
+    # 角色管理--新增角色
+    userGroupName=""
+    userGroupDescription=""
+
+    #用户管理--添加账户
+    prelist = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "147", "150", "151", "152", "153",
+               "155", "156", "157", "158", "159", "186", "187", "188"]
+    a1 = ['张', '金', '李', '王', '赵','陈','郭','宋','周','秦','何','刘']
+    a2 = ['玉', '明', '龙', '芳', '军', '玲','才','伟','娜','敏','静','杰']
+    a3 = ['', '立', '玲', '', '国', '','玉','','秀','','桂','勇']
+    addUserInfoUserName="auto自动化测试账号" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+    addUserInfoPhone=random.choice(prelist) + "".join(random.choice("0123456789") for i in range(8))
+    addUserInfoNickName=random.choice(a1) + random.choice(a2) + random.choice(a3)+time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+    addUserInfoGroupNameAndID=db.systemSql("getGroupIdAndName")
+    addUserInfoGroupName=addUserInfoGroupNameAndID[ random.randint(0, len(addUserInfoGroupNameAndID)-1)][1]
+    addUserInfoGroupId=addUserInfoGroupNameAndID[ random.randint(0, len(addUserInfoGroupNameAndID)-1)][0]
+    addUserInfoStates="0"
+    addUserInfoCompanyName="auto自动化公司" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+
+    # 用户管理--更新账户
+    addUserInfoUpdateUserName="更新auto自动化测试账号" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+    addUserInfoUpdatePhone=random.choice(prelist) + "".join(random.choice("0123456789") for i in range(8))
+    addUserInfoUpdateNickName="更新"+random.choice(a1) + random.choice(a2) + random.choice(a3)+time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+    addUserInfoUpdateGroupNameAndID=db.systemSql("getGroupIdAndName")
+    addUserInfoUpdateGroupName=addUserInfoGroupNameAndID[ random.randint(0, len(addUserInfoGroupNameAndID)-1)][1]
+    addUserInfoUpdateGroupId=addUserInfoGroupNameAndID[ random.randint(0, len(addUserInfoGroupNameAndID)-1)][0]
+    addUserInfoUpdateStates="1"
+    addUserInfoUpdateCompanyName="更新auto自动化公司" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+
+
+
+
+
+
+    @staticmethod
+    def addUserInfo():
+        addUserInfoPayload={
+            "userName":SystemManageParamsValue.addUserInfoUserName,
+            "phone":SystemManageParamsValue.addUserInfoPhone,
+            "nickName":SystemManageParamsValue.addUserInfoNickName,
+            "groupId":SystemManageParamsValue.addUserInfoGroupId,
+            "states":SystemManageParamsValue.addUserInfoStates,
+            "companyName":SystemManageParamsValue.addUserInfoCompanyName
+        }
+        return addUserInfoPayload
+
+    @staticmethod
+    def updateUserInfo():
+        updateUserInfoPayload={
+            "userName":SystemManageParamsValue.addUserInfoUpdateUserName,
+            "phone":SystemManageParamsValue.addUserInfoUpdatePhone,
+            "nickName":SystemManageParamsValue.addUserInfoUpdateNickName,
+            "groupId":SystemManageParamsValue.addUserInfoUpdateGroupId,
+            "states":SystemManageParamsValue.addUserInfoUpdateStates,
+            "companyName":SystemManageParamsValue.addUserInfoUpdateCompanyName,
+            "id":db.systemSql("getGroupId",SystemManageParamsValue.addUserInfoUserName)[0][0]
+        }
+        return updateUserInfoPayload
+    @staticmethod
+    def addUserGroup():
+        addUserGroupPayload={
+              "name":SystemManageParamsValue.userGroupName,
+                "ext":SystemManageParamsValue.userGroupDescription
+        }
+        return addUserGroupPayload
+
