@@ -28,8 +28,16 @@ class DB_database():
         return results
 
     @staticmethod
-    def systemSql():
-        pass
+    def systemSql(*param):
+        if param[0]=="getGroupIdAndName":
+            groupIdAndNameSql = "SELECT id,NAME from tb_project_user_group"
+            groupIdAndName = DB_database.excuteSql(groupIdAndNameSql, db="db_project")
+            return groupIdAndName
+        if param[0]=="getGroupId":
+            groupIdSql="SELECT id FROM tb_project_user WHERE userName='"+param[1]+"'"
+            groupId=DB_database.excuteSql(groupIdSql, db="db_project")
+            return groupId
+
 
     @staticmethod
     def houseSourceSql(*param):
@@ -39,7 +47,6 @@ class DB_database():
             customerIDSql="SELECT ID FROM mc_user WHERE NICK_NAME LIKE '%"+param[1]+"%'"
             customerID=DB_database.excuteSql(customerIDSql, db="danbay_device")[0][0]
             return customerID
-
         if param[0]=="getProviderNameID":
             customerIDSql = "SELECT ID FROM tb_project_homeprovider WHERE providerName LIKE '%" + param[1] + "%'"
             customerID = DB_database.excuteSql(customerIDSql, db="db_project")[0][0]
@@ -52,11 +59,6 @@ class DB_database():
             spaceIDSql = "SELECT id FROM tb_project_homelist WHERE homeNo LIKE  '%" + param[1] + "%'"
             spaceID = DB_database.excuteSql(spaceIDSql, db="db_project")[0][0]
             return spaceID
-
-
-
-
-
 
     @staticmethod
     def deviceSql(*param):
