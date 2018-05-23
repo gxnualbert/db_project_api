@@ -18,14 +18,8 @@ import logging
 class AddLog(object):
     def __init__(self):
         pass
-    @classmethod
-    def Log(self,logmessage,loglevel="info"):
-        # cwd = os.getcwd()
-        # # logFolder=os.path.dirname(cwd)+ "\\API_Test_Report\\"+ "log_"+time.strftime("%Y-%m-%d")
-        # logFolder=cwd+ "\\API_Test_Report\\"+ "log_"+time.strftime("%Y-%m-%d")
-        # if not os.path.exists(logFolder):
-        #     os.mkdir(logFolder)
-        # LOG_FILE =  logFolder +"\\"+ time.strftime('%Y-%m-%d %H_%M_%S', time.localtime(time.time())) + ".log"
+    @staticmethod
+    def log(log_message):
 
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
@@ -42,13 +36,8 @@ class AddLog(object):
         console.setFormatter(formatter)
         logging.getLogger('').addHandler(console)
         #################################################################################################
-        # if loglevel=="debug":
-        #     logging.debug(logmessage.decode("utf-8"))
-        # elif loglevel=="info":
-        logging.info(logmessage.decode("utf-8"))
-        # elif loglevel=="warning":
-        #     logging.warning(logmessage.decode("utf-8"))
+        logging.info(log_message)
 
-
-# a=AddLog()
-# a.Log("dddddddddddd")
+    @staticmethod
+    def status_code_API_return(opt_time, API_status_code):
+        AddLog.log("{optTime}返回的状态码:{apiStatusCode}".format(optTime=opt_time, apiStatusCode=API_status_code))
