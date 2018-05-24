@@ -228,7 +228,7 @@ class DeviceInstance(unittest.TestCase):
                           self.collector_id, True)
 
     def door_access_add_instance(self):
-        print(u"请参考bug 933")
+        self.assertEquals(True,False,msg="请参考bug 933")
 
     def smoke_detector_add_instance(self):
         payload = dmpv.smoke_detector_add_instance()
