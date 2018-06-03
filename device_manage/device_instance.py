@@ -15,7 +15,7 @@ from util.danbay_database import DataBaseValidateWebResult as db_wc
 from util.log_tool import AddLog as log
 from util.parameter_value import DeviceManageParamsValue as dmpv
 from util.request_url import ProjectUrls as pu
-
+from util.common_util import Util
 
 class DeviceInstance(unittest.TestCase):
     status_not_200 = "返回状态码不为200!接口返回状态码为："
@@ -54,7 +54,7 @@ class DeviceInstance(unittest.TestCase):
     repeater_model = "中继器型号"
     repeater_net_type = "中继器网络类型"
     repeater_id = "中继器id"
-
+    ck = Util.get_cookies()
     def base_message(self, info):
         return "数据库存储的{info}跟实际传入的不一致".format(info=info)
 
@@ -85,7 +85,7 @@ class DeviceInstance(unittest.TestCase):
     def center_control_add_instance(self):
         payload = dmpv.center_control_add_instance()
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"], self.cc_name,
                           self.cc_model,
@@ -94,7 +94,7 @@ class DeviceInstance(unittest.TestCase):
     def center_control_update_instance(self):
         payload = dmpv.center_control_update_instance()
         req_url = pu.devices_instance_urls()["update_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.cc_name, self.cc_model,
@@ -103,7 +103,7 @@ class DeviceInstance(unittest.TestCase):
     def center_control_delete_instance(self):
         payload = dmpv.center_control_delete_instance()
         req_url = pu.devices_instance_urls()["delete_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
 
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_id", payload["id"], "", "", "",
@@ -112,7 +112,7 @@ class DeviceInstance(unittest.TestCase):
     def lock_add_instance_common(self):
         payload = dmpv.lock_add_instance(u"普通")
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
 
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"], self.lock_name,
@@ -121,7 +121,7 @@ class DeviceInstance(unittest.TestCase):
     def lock_add_instance_net(self):
         payload = dmpv.lock_add_instance(u"网络")
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
 
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"], self.lock_name,
@@ -130,7 +130,7 @@ class DeviceInstance(unittest.TestCase):
     def lock_add_instance_other(self):
         payload = dmpv.lock_add_instance(u"其他")
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"], self.lock_name,
                           self.lock_model, self.lock_net_type, self.lock_id)
@@ -138,7 +138,7 @@ class DeviceInstance(unittest.TestCase):
     def lock_update_instance(self):
         payload = dmpv.lock_update_instance()
         req_url = pu.devices_instance_urls()["update_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"], self.lock_name,
                           self.lock_model, self.lock_net_type, self.lock_id)
@@ -146,7 +146,7 @@ class DeviceInstance(unittest.TestCase):
     def lock_delete_instance(self):
         payload = dmpv.lock_delete_instance()
         req_url = pu.devices_instance_urls()["delete_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_id", payload["id"], "", "", "",
                           self.lock_id, True)
@@ -154,7 +154,7 @@ class DeviceInstance(unittest.TestCase):
     def water_add_instance(self):
         payload = dmpv.water_meter_add_instance()
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"], self.water_name,
                           self.water_model, self.water_net_type, self.water_id)
@@ -162,7 +162,7 @@ class DeviceInstance(unittest.TestCase):
     def water_update_instance(self):
         payload = dmpv.water_meter_update_instance()
         req_url = pu.devices_instance_urls()["update_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"], self.water_name,
                           self.water_model, self.water_net_type, self.water_id)
@@ -170,7 +170,7 @@ class DeviceInstance(unittest.TestCase):
     def water_delete_instance(self):
         payload = dmpv.water_meter_delete_instance()
         req_url = pu.devices_instance_urls()["delete_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_id", payload["id"], "", "", "",
                           self.water_id, True)
@@ -178,7 +178,7 @@ class DeviceInstance(unittest.TestCase):
     def electric_add_instance(self):
         payload = dmpv.electric_meter_add_instance()
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.electric_name,
@@ -187,7 +187,7 @@ class DeviceInstance(unittest.TestCase):
     def electric_update_instance(self):
         payload = dmpv.electric_meter_update_instance()
         req_url = pu.devices_instance_urls()["update_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.electric_name,
@@ -196,7 +196,7 @@ class DeviceInstance(unittest.TestCase):
     def electric_delete_instance(self):
         payload = dmpv.electric_meter_delete_instance()
         req_url = pu.devices_instance_urls()["delete_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_id", payload["id"], "", "", "",
                           self.electric_id, True)
@@ -204,7 +204,7 @@ class DeviceInstance(unittest.TestCase):
     def collector_add_instance(self):
         payload = dmpv.collector_add_instance()
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.collector_name,
@@ -213,7 +213,7 @@ class DeviceInstance(unittest.TestCase):
     def collector_update_instance(self):
         payload = dmpv.collector_update_instance()
         req_url = pu.devices_instance_urls()["update_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.collector_name,
@@ -222,7 +222,7 @@ class DeviceInstance(unittest.TestCase):
     def collector_delete_instance(self):
         payload = dmpv.collector_delete_instance()
         req_url = pu.devices_instance_urls()["delete_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_id", payload["id"], "", "", "",
                           self.collector_id, True)
@@ -233,7 +233,7 @@ class DeviceInstance(unittest.TestCase):
     def smoke_detector_add_instance(self):
         payload = dmpv.smoke_detector_add_instance()
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.smoke_detector_name,
@@ -242,7 +242,7 @@ class DeviceInstance(unittest.TestCase):
     def smoke_detector_update_instance(self):
         payload = dmpv.smoke_detector_update_instance()
         req_url = pu.devices_instance_urls()["update_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.smoke_detector_name,
@@ -251,7 +251,7 @@ class DeviceInstance(unittest.TestCase):
     def smoke_detector_delete_instance(self):
         payload = dmpv.smoke_detector_delete_instance()
         req_url = pu.devices_instance_urls()["delete_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_id", payload["id"], "", "", "",
                           self.smoke_detector_id, True)
@@ -259,7 +259,7 @@ class DeviceInstance(unittest.TestCase):
     def repeater_add_instance(self):
         payload = dmpv.repeater_add_instance()
         req_url = pu.devices_instance_urls()["add_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.repeater_name,
@@ -268,7 +268,7 @@ class DeviceInstance(unittest.TestCase):
     def repeater_update_instance(self):
         payload = dmpv.repeater_update_instance()
         req_url = pu.devices_instance_urls()["update_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_name", payload["name"],
                           self.repeater_name,
@@ -277,7 +277,7 @@ class DeviceInstance(unittest.TestCase):
     def repeater_delete_instance(self):
         payload = dmpv.repeater_delete_instance()
         req_url = pu.devices_instance_urls()["delete_dev_url"]
-        r = requests.post(req_url, data=payload)
+        r = requests.post(req_url, data=payload,cookies=self.ck)
         operate_time = time.strftime("%Y-%m-%d %H:%M:%S")
         self.result_check(r, operate_time, payload, "get_device_properties_by_id", payload["id"], "", "", "",
                           self.repeater_id, True)

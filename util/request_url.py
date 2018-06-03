@@ -13,6 +13,10 @@ class ProjectUrls(object):
     project_url_prefix = rcf.get_basic_conf()["project_url_prefix"]
 
     @staticmethod
+    def login_url():
+        login_url="/project-service/user/login"
+        return ProjectUrls.project_url_prefix+login_url
+    @staticmethod
     def device_urls():
         device_type = "/project-service/device/type/"
         add_device_model_url = device_type + "addRecord"

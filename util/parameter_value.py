@@ -14,6 +14,7 @@ import time
 
 import requests
 
+from util.common_util import Util
 from util.danbay_database import DataBase as db
 from util.get_city import GetCity as gc
 from util.request_url import ProjectUrls as pu
@@ -29,9 +30,9 @@ class DeviceManageParamsValue(object):
     update_center_control_model = u"upda中控" + time.strftime('%m%d%H%M', time.localtime(time.time()))
 
     # 门锁
-    lock_name = u"auto门锁" + time.strftime('%m%d%H%M', time.localtime(time.time()))
-    lock_id= ""
-    lock_model = "lk_auto" + time.strftime('%m%d%H%M', time.localtime(time.time()))
+    lock_name = u"auto门锁" + time.strftime('%H%M', time.localtime(time.time()))
+    lock_id = ""
+    lock_model = "lk_auto" + time.strftime('%H%M', time.localtime(time.time()))
     # 更新门锁
     update_lock_name = u"upda门锁" + time.strftime('%m%d%H%M', time.localtime(time.time()))
     # LOCK_UPDATE_INSTANCE_NAME = u"upda门锁" + time.strftime('%m%d%H%M', time.localtime(time.time()))
@@ -78,7 +79,14 @@ class DeviceManageParamsValue(object):
     update_repeater_name = u"中继Update" + time.strftime('%H%M', time.localtime(time.time()))
     update_repeater_model = u"中继Update" + time.strftime('%H%M', time.localtime(time.time()))
 
+    # 门禁
+    door_access = ""
+
     # 更新设备属性
+
+    ck = Util.get_cookies()
+
+    # ck = ""
 
     @staticmethod
     def add_instance(img, name, types, model, cost, net, correspond, wire, type_id):
@@ -123,7 +131,8 @@ class DeviceManageParamsValue(object):
         with open(img_path, "rb") as image_file:
             encoded_img = base64.b64encode(image_file.read())
 
-        r = requests.post(upload_url, data={"base64": "data:image/png;base64," + encoded_img.decode("utf-8")})
+        r = requests.post(upload_url, data={"base64": "data:image/png;base64," + encoded_img.decode("utf-8")},
+                          cookies=DeviceManageParamsValue.ck)
         rsp = json.loads(r.text)
         img = rsp['image']
         return img
@@ -208,9 +217,9 @@ class DeviceManageParamsValue(object):
             lock_add_instance_net = "2"
 
         img = DeviceManageParamsValue.get_img_path("lock.png")
-        lock_add_instance_payload = {"name": lock_add_instance_name,
+        lock_add_instance_payload = {"name": lock_add_instance_name + str(random.randint(0, 100)),
                                      "types": "",
-                                     "model": lock_add_instance_model,
+                                     "model": lock_add_instance_model + str(random.randint(0, 100)),
                                      "cost": "",
                                      "net": lock_add_instance_net,
                                      "correspond": "",
@@ -225,7 +234,7 @@ class DeviceManageParamsValue(object):
         lock_update_instance_name = DeviceManageParamsValue.update_lock_name
         lock_update_instance_model = DeviceManageParamsValue.update_lock_model
         id_and_model = db.device_sql("get_product_id_and_model", DeviceManageParamsValue.lock_name)
-
+        DeviceManageParamsValue.lock_id = id_and_model[0]
         return DeviceManageParamsValue.update_instance("lockUpdate.png", lock_update_instance_name, "",
                                                        lock_update_instance_model, "", "1", "", "", id_and_model[0])
 
@@ -539,11 +548,12 @@ class SystemManageParamsValue(object):
     update_user_group_description = u"更新！！！！更新！！！更新！！！！这是自动化测试使用角色描述。这里有很多时间戳" + time.strftime('%Y-%m-%d_%H:%M:%S',
                                                                                                time.localtime(
                                                                                                    time.time()))
+    # 后面为group 添加权限是用到
+    user_group_id = ""
 
     # 用户管理--添加账户
     phone_prefix_list = ["130", "131", "132", "133", "134", "135", "136", "137", "138", "139", "147", "150", "151",
-                         "152", "153",
-                         "155", "156", "157", "158", "159", "186", "187", "188"]
+                         "152", "153", "155", "156", "157", "158", "159", "186", "187", "188"]
     first_name = ['张', '金', '李', '王', '赵', '陈', '郭', '宋', '周', '秦', '何', '刘']
     middle_name = ['玉', '明', '龙', '芳', '军', '玲', '才', '伟', '娜', '敏', '静', '杰']
     last_name = ['', '立', '玲', '', '国', '', '玉', '', '秀', '', '桂', '勇']
@@ -560,7 +570,7 @@ class SystemManageParamsValue(object):
     company_name = "auto自动化公司" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
 
     # 用户管理--更新账户
-    update_username = "更新auto自动化测试账号" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+    update_username = "更新auto测试账号" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
     update_phone = random.choice(phone_prefix_list) + "".join(random.choice("0123456789") for i in range(8))
     update_nickname = "更新" + random.choice(first_name) + random.choice(middle_name) + random.choice(
         last_name) + time.strftime(
@@ -570,6 +580,8 @@ class SystemManageParamsValue(object):
     update_group_id = update_group_name_and_id[random.randint(0, len(update_group_name_and_id) - 1)][0]
     update_states = "1"
     update_company_name = "更新auto自动化公司" + time.strftime('%Y-%m-%d_%H:%M:%S', time.localtime(time.time()))
+
+    # 角色权限配置项
 
     @staticmethod
     def add_user_info():
@@ -599,30 +611,52 @@ class SystemManageParamsValue(object):
     @staticmethod
     def delete_user_info():
         delete_user_info_payload = {
-            "userId": db.system_sql("get_group_id", SystemManageParamsValue.update_username)[0][0]
+            "userId": str(db.system_sql("get_group_id", SystemManageParamsValue.update_username)[0][0])
         }
         return delete_user_info_payload
 
     @staticmethod
     def add_user_group():
+        groupType = random.choice(["2", "3"])
         add_user_group_payload = {
-            "name": SystemManageParamsValue.group_name,
+            "name": SystemManageParamsValue.user_group_name,
+            "groupType": groupType,
             "ext": SystemManageParamsValue.user_group_description
         }
         return add_user_group_payload
 
     @staticmethod
     def update_user_group():
+        groupType = random.choice(["2", "3"])
+        SystemManageParamsValue.user_group_id = \
+        db.system_sql("get_group_id_with_group_name", SystemManageParamsValue.user_group_name)[0][0]
         update_user_group_payload = {
             "name": SystemManageParamsValue.update_user_group_name,
             "ext": SystemManageParamsValue.update_user_group_description,
-            "groupId": db.system_sql("get_group_id_with_group_name", SystemManageParamsValue.user_group_name)[0][0]
+            "id": SystemManageParamsValue.user_group_id,
+            "groupType": groupType
         }
         return update_user_group_payload
 
+    # @staticmethod
+    # def update_user_group_setting(self):
+    #     #更新角色权限配置项
+    #     update_user_group_setting_payload={
+    #         "groupId":SystemManageParamsValue.user_group_id,
+    #         "modifyPowerSettingDtoList":modifyPowerSettingDtoList
+    #     }
     @staticmethod
     def delete_user_group():
         delete_user_group_payload = {
-            "groupId": db.system_sql("get_group_id_with_group_name", SystemManageParamsValue.update_group_name)[0][0]
+            # "groupId": db.system_sql("get_group_id_with_group_name", SystemManageParamsValue.update_group_name)[0][0]
+            "groupId": SystemManageParamsValue.user_group_id
         }
         return delete_user_group_payload
+
+
+class ProjectLogin(object):
+
+    @staticmethod
+    def login(user_name, password):
+        login_payload = {"userName": user_name, "password": password}
+        return login_payload

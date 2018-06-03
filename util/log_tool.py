@@ -9,7 +9,6 @@
 
 import logging
 import logging.handlers
-import time,os
 
 
 import logging
@@ -24,14 +23,13 @@ class AddLog(object):
         logging.basicConfig(level=logging.INFO,
                             format='%(asctime)s %(filename)s[line:%(lineno)d] %(levelname)s %(message)s',
                             datefmt='%Y-%m-%d %H:%M:%S',
-                            filename="danbay",
+                            filename="",
                             filemode='w')
         #################################################################################################
         # 定义一个StreamHandler，将INFO级别或更高的日志信息打印到标准错误，并将其添加到当前的日志处理对象#
         console = logging.StreamHandler()
         # console = logging.FileHandler(LOG_FILE)  # 写到文件中，不会写到HTML里面
         console.setLevel(logging.INFO)
-        # formatter = logging.Formatter('%(name)s: %(levelname)s %(message)s') %(name)s: %(levelname)s %(message)s 这一行可以控制log的格式 12s 表示12个空格
         formatter = logging.Formatter('%(name)s: %(levelname)s %(message)s')
         console.setFormatter(formatter)
         logging.getLogger('').addHandler(console)

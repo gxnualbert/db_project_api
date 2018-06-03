@@ -59,7 +59,7 @@ class DataBase(object):
             return customer_id
         if param[0] == "get_home_source_id":
             home_source_id_sql = "SELECT id FROM tb_project_homesource WHERE homeSourceName LIKE  '%" + param[1] + "%'"
-            home_source_id = DataBase.excuteSql(home_source_id_sql, db="db_project")[0][0]
+            home_source_id = DataBase.excute_sql(home_source_id_sql, db="db_project")[0][0]
             return home_source_id
         if param[0] == "get_space_id":
             space_id_sql = "SELECT id FROM tb_project_homelist WHERE homeNo LIKE  '%" + param[1] + "%'"
@@ -93,24 +93,78 @@ class DataBase(object):
 
 class DataBaseValidateWebResult(object):
 
+    # 设备管理页面Sql 语句检查
     @staticmethod
     def device_manage_web_check(*param):
 
-        if param[0] == "get_device_type_and_id":
-            model_id_sql = "SELECT id from tb_project_device_type WHERE `name` LIKE '%" + param[1] + "%'"
-            model_id = DataBase.excute_sql(model_id_sql, db="db_project")[0][0]
-            return model_id
+        if param[0] == "get_device_properties_by_id":
+            device_properties_sql = "SELECT name,model,net,del,id from tb_project_device_info WHERE id='" + \
+                                    str(param[1]) + "'"
+            device_properties = DataBase.excute_sql(device_properties_sql, db="db_project")[0]
+            return device_properties
+        if param[0] == "get_device_properties_by_name":
+            device_properties_sql = "SELECT name,model,net,del,id from tb_project_device_info WHERE name='" + \
+                                    str(param[1]) + "'"
+            device_properties = DataBase.excute_sql(device_properties_sql, db="db_project")[0]
+            return device_properties
 
-        if param[0] == "add_dev_url":
-            center_control_properties_sql = "SELECT name,model,net,del from tb_project_device_info WHERE name='" + \
-                                            param[
-                                                1] + "'"
-            center_control_properties = DataBase.excute_sql(center_control_properties_sql, db="db_project")[0]
-            return center_control_properties
-        if param[0] == "get_center_control_properties_by_id":
-            center_control_properties_sql = "SELECT name,model,net,del from tb_project_device_info WHERE id='" + \
-                                            str(param[1]) + "'"
-            center_control_properties = DataBase.excute_sql(center_control_properties_sql, db="db_project")[0]
-            return center_control_properties
-        if param[0] == "get_lock_properties":
-            lock_properties_sql = ""
+    # 房源管理页面sql检查
+    @staticmethod
+    def house_manage_web_check(*param):
+        # 房源管理相关
+        if param[0] == "get_home_provider_info":
+            home_provider_sql = "SELECT id,providerName,del,enterpriseAccountId FROM tb_project_homeprovider WHERE providerName='" + \
+                                param[1] + "'"
+            home_provider_info = DataBase.excute_sql(home_provider_sql, db="db_project")
+            home_provider_info = home_provider_info[0]
+            return home_provider_info
+        if param[0] == "get_home_source_info":
+            home_source_sql = "SELECT id,types,providerId,homeSourceName,del FROM tb_project_homesource WHERE homeSourceName='" + str(
+                param[1]) + "'"
+            home_source_info = DataBase.excute_sql(home_source_sql, db="db_project")[0]
+            return home_source_info
+
+        if param[0] == "get_space_info":
+            space_sql = "SELECT id,homeSourceId,homeNo,isPublic,floorNum,homeType,del from tb_project_homelist WHERE id='" + \
+                        param[
+                            1] + "'"
+            space_info = DataBase.excute_sql(space_sql, db="db_project")[0]
+            return space_info
+        if param[0] == "get_space_id":
+            space_id_sql = "SELECT id FROM tb_project_homelist WHERE homeSourceId='" + param[1] + "'  AND homeNo='" + \
+                           param[2] + "'"
+            space_id = DataBase.excute_sql(space_id_sql, db="db_project")[0][0]
+            return space_id
+
+    # 系统管理页面sql检查
+    @staticmethod
+    def system_manager_web_check(*param):
+        # 用户管理相关
+        if param[0] == "get_user_info":
+            user_sql = "SELECT groupId,userName,nickName,companyName,del,states,phone " \
+                       "FROM tb_project_user WHERE " + param[1][0] + "='" + str(param[1][1]) + "'"
+            user_info = DataBase.excute_sql(user_sql, db="db_project")[0]
+            return user_info
+        if param[0] == "get_user_group":
+            user_group_sql = "SELECT id,name,ext,del,groupType FROM tb_project_user_group WHERE " + param[1][
+                0] + "='" + str(param[1][1]) + "'"
+            user_group = DataBase.excute_sql(user_group_sql, db="db_project")[0]
+            return user_group
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
